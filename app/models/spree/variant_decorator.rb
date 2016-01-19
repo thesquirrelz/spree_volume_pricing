@@ -22,10 +22,6 @@ Spree::Variant.class_eval do
       end
     else
       self.join_volume_prices.each do |volume_price|
-        if volume_price.spree_role
-          return self.price unless user
-          return self.price unless user.has_spree_role? volume_price.spree_role.name.to_sym
-        end
         if volume_price.include?(quantity)
           case volume_price.discount_type
           when 'price'
@@ -41,7 +37,6 @@ Spree::Variant.class_eval do
           end
         end
       end
-      # No price ranges matched.
       return self.price
     end
   end
