@@ -14,37 +14,20 @@ Spree::Variant.class_eval do
 
   # calculates the price based on quantity
   def volume_price(quantity, user=nil, currency)
-    if self.join_volume_prices.count == 0
-      if !(self.product.master.join_volume_prices.count == 0) && Spree::Config.use_master_variant_volume_pricing
-        self.product.master.volume_price(quantity, user)
-      else
-        return self.price
-      end
-    else
+    if self.join_volume_prices.any?
       self.join_volume_prices.each do |volume_price|
         if volume_price.include?(quantity)
-         case volume_price.discount_type
-          when 'price'
-            if currency.include?('USD')
-              return volume_price.usd_amount
-            else 
-              return volume_price.cny_amount
-            end 
+          case volume_price.discount_type
+          when 'price'          
+            return currency.include?('USD') ? volume_price.usd_amount : volume_price.cny_amount 
           when 'dollar'
-            if currency.include?('USD')
-              return self.price - volume_price.cny_amount
-            else 
-              return self.price - volume_price.usd_amount
-            end 
+            return self.price - currency.include?('USD') ? volume_price.usd_amount : volume_price.cny_amount
           when 'percent'
-            if currency.include?('USD')
-              return self.price * (1 - volume_price.cny_amount)
-            else 
-              return self.price - volume_price.usd_amount
-            end 
+            return self.price * (1 - currency_include?('USD') ? volume_price.usd_amount : volume_price.usd_amount)
           end
         end
       end
+     else
       return self.price
     end
   end
