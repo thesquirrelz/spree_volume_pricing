@@ -16,12 +16,12 @@
     <%= f.text_field :range, size: 10, class: 'form-control' %>
   </td>
   <td>
-    <%= error_message_on(f.object, :usd_amount) %>
-    <%= f.text_field :usd_amount, size: 10, class: 'form-control' %>
-  </td>
-  <td>
     <%= error_message_on(f.object, :cny_amount) %>
     <%= f.text_field :cny_amount, size: 10, class: 'form-control' %>
+  </td>
+  <td>
+    <%= error_message_on(f.object, :usd_amount) %>
+    <%= f.text_field :usd_amount, size: 10, class: 'form-control' %>
   </td>
   <td>
     <%= error_message_on(f.object, :position) %>
