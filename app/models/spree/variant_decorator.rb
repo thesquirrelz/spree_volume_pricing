@@ -23,7 +23,7 @@ Spree::Variant.class_eval do
     else
       self.join_volume_prices.each do |volume_price|
         if volume_price.include?(quantity)
-          case volume_price.discount_type
+         case volume_price.discount_type
           when 'price'
             if currency.include?('USD')
               return volume_price.usd_amount
@@ -31,9 +31,17 @@ Spree::Variant.class_eval do
               return volume_price.cny_amount
             end 
           when 'dollar'
-            return self.price - volume_price.amount
+            if currency.include?('USD')
+              return self.price - volume_price.cny_amount
+            else 
+              return self.price - volume_price.usd_amount
+            end 
           when 'percent'
-            return self.price * (1 - volume_price.amount)
+            if currency.include?('USD')
+              return self.price * (1 - volume_price.cny_amount)
+            else 
+              return self.price - volume_price.usd_amount
+            end 
           end
         end
       end
