@@ -27,8 +27,8 @@ Spree::Variant.class_eval do
           end
         end
       end
-      return self.price
     end
+    return self.price_in(currency).amount
   end
 
   # return percent of earning
