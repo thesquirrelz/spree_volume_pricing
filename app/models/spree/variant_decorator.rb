@@ -27,7 +27,6 @@ Spree::Variant.class_eval do
           end
         end
       end
-     else
       return self.price
     end
   end
